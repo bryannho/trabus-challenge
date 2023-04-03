@@ -81,6 +81,7 @@ def statsTotal(df, station):
     return (totalRain, totalTempHi, totalTempLo, totalTempAvg)
 
 def plotLine(df, station):
+    df = df.round(2)
     df = df.iloc[::24, :]
     df.sort_values(by=['date'])
     maxTemp = df['temperature'].max()
@@ -116,7 +117,8 @@ def monthlyBar(monthlies, cat):
         go.Bar(name='Melbourne, FL', x=months, y=monthlies[0]),
         go.Bar(name='San Diego, CA', x=months, y=monthlies[1])
     ])
-    fig.update_layout(barmode='group', title=f'Average Monthly {cat}', xaxis_title='Month', yaxis_title=cat)
+    title = f'Average Monthly {cat}' if cat != 'Rainfall' else 'Total Monthly Rainfall'
+    fig.update_layout(barmode='group', title=title, xaxis_title='Month', yaxis_title=cat)
     fig.show()
 
 def plotBar(temps, rain, humidities):
