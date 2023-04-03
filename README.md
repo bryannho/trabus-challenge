@@ -11,6 +11,7 @@ Coding challenge for Full Stack Engineer role at Trabus Technologies.
 
 0. Install dependencies \
     `pip3 install psychopg2`
+    `pip3 install plotly==5.14.0`
 
 1. Create an account with ElephantSQL, and create a new database instance.
 
