@@ -2,10 +2,10 @@ import sys
 import os
 import psycopg2
 
-DB_NAME = "********"
-DB_USER = "********"
-DB_PASSWORD = "***********************"
-DB_HOST = "*******.db.elephantsql.com"
+DB_NAME = "ndvenfvc"
+DB_USER = "ndvenfvc"
+DB_PASSWORD = "ZNh4pWevN2n9xRvJNxLXaMxc-_sxJ6no"
+DB_HOST = "mahmud.db.elephantsql.com"
 DB_PORT = "5432"
 
 
