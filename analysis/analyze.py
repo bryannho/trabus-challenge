@@ -148,8 +148,8 @@ def main():
     temps = (temps_kmlb, temps_ksan)
     rain = (rainfall_kmlb, rainfall_ksan)
     humidities = (humidities_kmlb, humidities_ksan)
-    #plotLine(df_kmlb, 'kmlb')
-    #plotLine(df_ksan, 'ksan')
+    plotLine(df_kmlb, 'kmlb')
+    plotLine(df_ksan, 'ksan')
     plotBar(temps, rain, humidities)
     
 
