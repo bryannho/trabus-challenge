@@ -2,10 +2,10 @@ import sys
 import os
 import psycopg2
 
-DB_NAME = "ndvenfvc"
-DB_USER = "ndvenfvc"
-DB_PASSWORD = "ZNh4pWevN2n9xRvJNxLXaMxc-_sxJ6no"
-DB_HOST = "mahmud.db.elephantsql.com"
+DB_NAME = "********"
+DB_USER = "********"
+DB_PASSWORD = "********************************"
+DB_HOST = "******.db.elephantsql.com"
 DB_PORT = "5432"
 
 
@@ -23,13 +23,6 @@ def createDB():
     cur.execute("INSERT INTO climate VALUES('kmlb', '2019-01-01 01:00:00', 69.0, 67.0, 0.0, 0.0)")
     conn.commit()
     cur.close()
-
-# def insertDB(stationId, values):
-#     cur = conn.cursor()
-#     date, temp, dp, ws, precip = tuple(values)
-#     cur.execute("INSERT INTO climate VALUES(%s, %s, %s, %s, %s, %s)", (stationId, date, temp, dp, ws, precip))
-#     conn.commit()
-#     cur.close()
 
 # Connect to DB and insert batch of rows into DB
 def insertRowsToDB(values):

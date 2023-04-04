@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="table-data"class="container">
+    <h1 class="text-center" style="padding: 40px 0px 40px 0px;">
+        Monthly Temperature and Rainfall - Melbourne, FL vs. San Diego, CA
+    </h1>
+    <table class="table table-responsive table-bordered table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Month</th>
+            <th scope="col">Avg. Temp (F) - KMLB</th>
+            <th scope="col">Avg. Temp (F) - KSAN</th>
+            <th scope="col">Total Rainfall (in) - KMLB</th>
+            <th scope="col">Total Rainfall (in) - KSAN</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for month, temp_kmlb, temp_ksan, rain_kmlb, rain_ksan in rowData %}
+            <tr>
+                <th scope="row">{{month}}</th>
+                <td>{{temp_kmlb}}</td>
+                <td>{{temp_ksan}}</td>
+                <td>{{rain_kmlb}}</td>
+                <td>{{rain_ksan}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="plot-temp" class="container" style="padding: 10px 0px 10px 0px;">
+    
+    {% autoescape off %}
+    {{plotTemps}}
+    {% endautoescape %}
+</div>
+<div id="plot-rain" class="container" style="padding: 10px 0px 20px 0px;">
+    {% autoescape off %}
+    {{plotRain}}
+    {% endautoescape %}
+</div>
+
+</body>
+</html>
+
