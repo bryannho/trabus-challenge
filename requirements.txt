@@ -1,0 +1,7 @@
+Python packages used:
+- pandas
+- numpy
+- psycopg2
+- plotly
+- django
+- django-bootstrap
