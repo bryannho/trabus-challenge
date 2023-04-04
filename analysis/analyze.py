@@ -20,11 +20,13 @@ conn = psycopg2.connect(
     port=DB_PORT
 )
 
+# Calculate humidity by applying given equation over all rows
 def statsHumidity(df, station):
     df = df.loc[df['station_id'] == station].copy()
     df['H'] = df.apply(humidityEquation, axis=1)
     return df
 
+# Humidity equation
 def humidityEquation(row):
     t = row['temperature']
     d = row['dewpoint']
@@ -32,19 +34,14 @@ def humidityEquation(row):
         return None
     if d == None or d == 0 or pd.isna(d):
         return None
-    #print(math.exp(17.625 * t * d))
     t = 5 / 9 * (t + 459.67)
     d = 5 / 9 * (d + 459.67)
-    #numerator = np.longdouble(np.longdouble(np.exp(17.625 * d)) / 243.04 + d)
-    #denominator = np.longdouble(np.longdouble(np.exp(17.625 * t)) / 243.04 + t)
     e = 0.611 * np.exp(5423 * (1/273 - 1/d))
     es = 0.611 * np.exp(5423 * (1/273 - 1/t))
-    #print(t, d, e, es)
     humidity = 100 * (e / es)
-    #rh = 100 * ((112 - 0.1 * t + d) / 112 + 0.9 * t) * 8
-    #print(t, d, humidity)
     return humidity
 
+# Calculate monthly avg. temps, rainfall, avg. humidity
 def statsMonthly(df, station):
     avgTempsByMonth = []
     sumRainfallByMonth = []
@@ -61,7 +58,7 @@ def statsMonthly(df, station):
         avgHByMonth.append(avgH)
     return avgTempsByMonth, sumRainfallByMonth, avgHByMonth
 
-    
+# Calculate total rainfall, days above 100F, days below 32F, and average temp
 def statsTotal(df, station):
     totalRain = len(df[(df['station_id'] == station) & (df['precipitation'] > 0.0)])
     totalTempHi = len(df[(df['station_id'] == station) & (df['temperature'] > 100)])
@@ -69,20 +66,25 @@ def statsTotal(df, station):
     totalTempAvg = df.loc[df['station_id'] == station, 'temperature'].mean().round(2)
     return (totalRain, totalTempHi, totalTempLo, totalTempAvg)
 
+# Take only the temperature values at 12:00 each day
 def reduceDaily(row):
     if(row['date'].strftime("%H:%M:%S") != "12:00:00"):
         return None
-    return row['temperature']
+    return 1
 
+# Reduce df to one row for each day
 def getDaily(df):
-    df['tempDaily'] = df.apply(reduceDaily, axis=1)
-    df = df[df['tempDaily'].notna()]
+    df['chosen'] = df.apply(reduceDaily, axis=1)
+    df = df[df['chosen'].notna()]
     df = df.round(2)
     df = df.sort_values(by=['date'])
     return df
 
+# Plot the temp and humidity as a line graph, marking min/max values as annotations and averages as horizontal lines
 def plotLine(df, station):
+    # Reduce df to daily values
     df = getDaily(df)
+    # Find max/min temp/humidity
     maxTemp = df['temperature'].max()
     maxTempDay = df[df['temperature'] == maxTemp]['date'].iloc[-1]
     minTemp = df['temperature'].min()
@@ -91,8 +93,10 @@ def plotLine(df, station):
     maxHDay = df[df['H'] == maxH]['date'].iloc[-1]
     minH = df['H'].min()
     minHDay = df[df['H'] == minH]['date'].iloc[-1]
+    # Find avg. temp/humidity
     avgTemp = df['temperature'].mean().round(2)
     avgH = df['H'].mean().round(2)
+    # Create line plot
     fig = go.Figure()
     fig.add_scatter(x=df['date'], y=df['temperature'], mode='lines', name='Temperature')
     fig.add_scatter(x=df['date'], y=df['H'], mode='lines', name='Humidity')
@@ -109,6 +113,7 @@ def plotLine(df, station):
     fig.update_layout(title=title, xaxis_title='Date', yaxis_title='Temperature (F) / Humidity (%)')
     fig.show()
 
+# Create bar chart comparing monthly temp/rainfall/humidity between kmlb and ksan
 def monthlyBar(monthlies, cat):
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     fig = go.Figure(data=[
@@ -125,13 +130,13 @@ def monthlyBar(monthlies, cat):
     fig.update_layout(barmode='group', title=title, xaxis_title='Month', yaxis_title=y_title)
     fig.show()
 
-
+# Create 3 bar charts comparing monthly temp/rainfall/humidity between kmlb and ksan
 def plotBar(temps, rain, humidities):
     monthlyBar(temps, 'Temperature')
     monthlyBar(rain, 'Rainfall')
     monthlyBar(humidities, 'Humidity')
 
-
+# Conduct total stat analysis, humidity calculation, and monthly stat analysis for a weather station
 def analyze(df, station):
     totalStats = statsTotal(df, station)
     print('Total Rainfall, Days above 100F, Days Below 32F, Avg. Temp for station ', station, ': ', totalStats)
@@ -139,7 +144,7 @@ def analyze(df, station):
     avgTemps, sumRainfall, avgHumidities = statsMonthly(df, station)
     return df, avgTemps, sumRainfall, avgHumidities
 
-    
+# Load data from ElephantSQL database
 def loadData():
     cur = conn.cursor()
     query = "SELECT * FROM climate"

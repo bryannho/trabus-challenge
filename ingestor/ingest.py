@@ -17,6 +17,7 @@ conn = psycopg2.connect(
     port=DB_PORT
 )
 
+# Create DB if it does not already exist
 def createDB():
     cur = conn.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS climate (station_id VARCHAR(4), date TIMESTAMP, temperature float, dewpoint float, wind_speed float, precipitation float)");
