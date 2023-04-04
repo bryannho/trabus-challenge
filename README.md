@@ -10,12 +10,12 @@ Coding challenge for Full Stack Engineer role at Trabus Technologies.
 ### Data Ingestor
 
 0. Install dependencies \
-    `pip3 install pandas`
-    `pip3 install numpy`
-    `pip3 install psychopg2`
-    `pip3 install plotly==5.14.0`
-    `pip3 install django`
-    `pip3 install django-bootstrap-v5`
+    `pip3 install pandas` \
+    `pip3 install numpy` \
+    `pip3 install psychopg2` \
+    `pip3 install plotly==5.14.0` \
+    `pip3 install django` \
+    `pip3 install django-bootstrap-v5` \
 
 1. Create an account with ElephantSQL, and create a new database instance.
 
@@ -34,7 +34,8 @@ Coding challenge for Full Stack Engineer role at Trabus Technologies.
 7. In your ElephantSQL instance, navigate to the "Browser" tab and verify the data using: \
     `SELECT * FROM climate`
 
-### Data Ingestor
+
+### Data Analysis
 
 1. From the root directory trabus-challenge, navigate to analysis/ \
     `cd analysis`
@@ -45,6 +46,7 @@ Coding challenge for Full Stack Engineer role at Trabus Technologies.
 
 4. Run analysis.py \
     `python3 analysis.py`
+
 
 ### Data Visualization
 
